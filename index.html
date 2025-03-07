@@ -1,581 +1,1149 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <title>Valeria & Nicholas Wedding Rush</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perchino Express Fantasy</title>
     <style>
-        body {
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #457b9d;
+            --light-color: #f1faee;
+            --dark-color: #1d3557;
+            --accent-color: #a8dadc;
+        }
+        
+        * {
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
-            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        canvas {
-            display: block;
-            margin: 0 auto;
-            background-color: transparent;
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
         }
-        #game-container {
-            position: relative;
-            width: 800px;
-            height: 480px;
-            margin: 20px auto;
+        
+        header {
+            color: black;
+            text-align: center;
+            padding: 1.5rem 0;
         }
-        #hud {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: #333;
-            font-size: 18px;
+        
+        .logo {
+            font-size: 2.5rem;
             font-weight: bold;
-            text-shadow: 1px 1px 1px white;
+            margin-bottom: 0.5rem;
         }
-        #instructions {
-            text-align: center;
-            margin: 10px auto;
-            color: #333;
-            max-width: 600px;
+        
+        .tagline {
+            font-style: italic;
+            font-size: 1.2rem;
         }
-        h1 {
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .sidebar {
+            flex: 1;
+            min-width: 250px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .content {
+            flex: 3;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar h2, .content h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .nav-links {
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-links a {
+            display: block;
+            padding: 0.5rem;
+            text-decoration: none;
+            color: var(--dark-color);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-links a:hover {
+            background-color: var(--accent-color);
+            padding-left: 1rem;
+        }
+        
+        .contestant-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .contestant-card {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1rem;
             text-align: center;
-            margin: 10px 0;
-            color: #B71C1C;
-            text-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .contestant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contestant-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .contestant-name {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contestant-team {
+            font-style: italic;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .contestant-value {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            padding: 0.3rem 0.8rem;
+            display: inline-block;
+        }
+        
+        .add-to-team {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .add-to-team:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .team-section {
+            margin-top: 2rem;
+        }
+        
+        .team-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: var(--accent-color);
+            border-radius: 8px;
+        }
+        
+        .team-member {
+            background-color: white;
+            border-radius: 8px;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .team-member img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .team-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        
+        .team-budget, .team-bonus {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        .rules-section {
+            margin-top: 2rem;
+        }
+        
+        .rules-list {
+            list-style-position: inside;
+            margin-top: 1rem;
+        }
+        
+        .rules-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+        }
+        
+        .bonus-section {
+            margin-top: 2rem;
+        }
+        
+        .bonus-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .bonus-table th, .bonus-table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        
+        .bonus-table th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .bonus-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .bonus-table tr:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .stats-section {
+            margin-top: 2rem;
+        }
+        
+        .create-team-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .create-team-btn:hover {
+            background-color: var(--dark-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            
+            margin-top: 2rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        /* Stili per la pagina di classifica */
+        .ranking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .action-bar {
+            margin-bottom: 1rem;
+        }
+        
+        .filter-dropdown {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--secondary-color);
+            margin-right: 0.5rem;
+        }
+        
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .ranking-table th, .ranking-table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+        
+        .ranking-table th {
+            background-color: var(--secondary-color);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .ranking-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .ranking-table tr:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .points-badge {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            padding: 0.3rem 0.8rem;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        .ranking-position {
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        .first {
+            color: gold;
+        }
+        
+        .second {
+            color: silver;
+        }
+        
+        .third {
+            color: #cd7f32; /* bronze */
+        }
+        
+        /* Stili per la sezione di assegnazione punti */
+        .points-form {
+            background-color: var(--light-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+        
+        .points-form h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+        
+        .form-row {
+            display: flex;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        
+        .form-label {
+            flex: 1;
+            margin-right: 1rem;
+        }
+        
+        .form-input {
+            flex: 2;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .form-select {
+            flex: 2;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .submit-btn {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tappa-info {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: var(--accent-color);
+            border-radius: 8px;
+        }
+        
+        .history-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .history-date {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .history-action {
+            font-weight: bold;
+        }
+        
+        .history-points {
+            display: inline-block;
+            margin-left: 0.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .content {
+                order: -1;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .form-label, .form-input, .form-select {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Valeria & Nicholas Wedding Rush</h1>
-    <div id="instructions">
-        <p>Aiuta lo sposo a raggiungere la sposa!</p>
-        <p>← → per muoversi destra/sinistra, ↑ per saltare</p>
-    </div>
-    <div id="game-container">
-        <canvas id="gameCanvas" width="800" height="480"></canvas>
-        <div id="hud">Tempo: <span id="timer">60</span> | Cuori: <span id="hearts">0</span></div>
-    </div>
-
-    <script>
-        // Game initialization
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const timerDisplay = document.getElementById('timer');
-        const heartsDisplay = document.getElementById('hearts');
-        
-        // Game state
-        let gameRunning = true;
-        let gameWon = false;
-        let timeLeft = 60;
-        let hearts = 3;
-        
-        // Player (groom)
-        const player = {
-            x: 50,
-            y: 350,
-            width: 40,
-            height: 60,
-            speed: 5,
-            jumpPower: 13,
-            velocityY: 0,
-            isJumping: false,
-            direction: 1, // 1 for right, -1 for left
-            color: '#000080', // Dark blue for groom's suit
-            skinColor: '#E6C7A5', // Skin tone
-            hairColor: '#5D4037' // Brown hair
-        };
-
-        // Bride (goal)
-        const bride = {
-            x: 720,
-            y: 160,
-            width: 40,
-            height: 60,
-            color: '#FFFFFF', // White for bride's dress
-            skinColor: '#C5A288', // Skin tone
-            hairColor: '#000000' // Black hair
-        };
-
-        // Platforms
-        const platforms = [
-            { x: 0, y: 420, width: 800, height: 60, color: '#7B5804' },   // Ground
-            { x: 200, y: 350, width: 100, height: 20, color: '#D2B48C' }, // Platform 1
-            { x: 350, y: 300, width: 100, height: 20, color: '#D2B48C' }, // Platform 2
-            { x: 500, y: 250, width: 100, height: 20, color: '#D2B48C' }, // Platform 3
-            { x: 650, y: 220, width: 150, height: 20, color: '#D2B48C' }, // Final platform (bride's platform)
-        ];
-
-        // Obstacles (wedding-themed)
-        const obstacles = [
-            { x: 250, y: 330, width: 20, height: 20, color: '#FF69B4', type: 'gift' },  // Gift box
-            { x: 400, y: 280, width: 20, height: 20, color: '#E91E63', type: 'ring' },  // Wedding ring
-            { x: 150, y: 400, width: 20, height: 20, color: '#4CAF50', type: 'bouquet' }, // Bouquet
-            { x: 550, y: 230, width: 30, height: 20, color: '#FFC107', type: 'cake' },  // Wedding cake
-        ];
-
-        // Moving obstacles (wedding guests)
-        const movingObstacles = [
-            { 
-                x: 300, 
-                y: 390, 
-                width: 30, 
-                height: 30, 
-                color: '#8D6E63', 
-                speedX: 2, 
-                direction: 1, 
-                minX: 300, 
-                maxX: 450,
-                skinColor: '#FFDBAC'
-            }, // Guest 1
-            { 
-                x: 550, 
-                y: 390, 
-                width: 30, 
-                height: 30, 
-                color: '#90A4AE', 
-                speedX: 3, 
-                direction: 1, 
-                minX: 550, 
-                maxX: 700,
-                skinColor: '#D8B08C'
-            }, // Guest 2
-        ];
-
-        // Collectibles (hearts)
-        const collectibles = [
-            { x: 250, y: 300, width: 20, height: 20, color: '#FF0000', type: 'heart', collected: false },
-            { x: 400, y: 230, width: 20, height: 20, color: '#FF0000', type: 'heart', collected: false },
-            { x: 600, y: 190, width: 20, height: 20, color: '#FF0000', type: 'heart', collected: false },
-        ];
-
-        // Input handling
-        const keys = {};
-        window.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
-        });
-        window.addEventListener('keyup', (e) => {
-            keys[e.key] = false;
-        });
-
-        // Game timer
-        const gameTimer = setInterval(() => {
-            if (gameRunning && !gameWon) {
-                timeLeft--;
-                timerDisplay.textContent = timeLeft;
+    <header>
+        <div class="logo">🌍 FantaPechino 🌍</div>
+    </header>
+    
+    <div class="container">
+        <div class="main-content">
+            <!-- <div class="sidebar">
+                <h2>Menu</h2>
+                <ul class="nav-links">
+                    <li><a onclick="showTab('home-tab')">Home</a></li>
+                    <li><a onclick="showTab('ranking-tab')">Classifica</a></li>
+                    <li><a onclick="showTab('points-tab')">Assegna Punti</a></li>
+                    <li><a onclick="showTab('home-tab')">Le mie squadre</a></li>
+                    <li><a onclick="showTab('home-tab')">Regolamento</a></li>
+                    <li><a onclick="showTab('home-tab')">Bonus/Malus</a></li>
+                    <li><a onclick="showTab('home-tab')">Statistiche</a></li>
+                    <li><a onclick="showTab('home-tab')">Lega Amici</a></li>
+                </ul>
                 
-                if (timeLeft <= 0) {
-                    gameOver();
-                }
-            }
-        }, 1000);
-
-        // Game logic update
-        function update() {
-            if (!gameRunning) return;
-
-            // Player movement
-            if (keys['ArrowLeft']) {
-                player.x -= player.speed;
-                player.direction = -1;
-            }
-            if (keys['ArrowRight']) {
-                player.x += player.speed;
-                player.direction = 1;
-            }
+                <div class="team-section">
+                    <h2>La mia Squadra</h2>
+                    <div class="team-preview">
+                        <div class="team-member">
+                            <div class="contestant-img">👥</div>
+                            <span>Seleziona</span>
+                        </div>
+                        <div class="team-member">
+                            <div class="contestant-img">👥</div>
+                            <span>Seleziona</span>
+                        </div>
+                        <div class="team-member">
+                            <div class="contestant-img">👥</div>
+                            <span>Seleziona</span>
+                        </div>
+                    </div>
+                    <div class="team-stats">
+                        <div class="team-budget">Budget: 100 crediti</div>
+                        <div class="team-bonus">Bonus: +0</div>
+                    </div>
+                    <button class="create-team-btn">Crea la tua squadra</button>
+                </div>
+            </div> -->
             
-            // Jumping
-            if (keys['ArrowUp'] && !player.isJumping) {
-                player.velocityY = -player.jumpPower;
-                player.isJumping = true;
-            }
-            
-            // Apply gravity
-            player.velocityY += 0.6;
-            player.y += player.velocityY;
-            
-            // Keep player within canvas bounds
-            if (player.x < 0) player.x = 0;
-            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
-            
-            // Check platform collisions
-            let onPlatform = false;
-            platforms.forEach(platform => {
-                if (
-                    player.x + player.width > platform.x &&
-                    player.x < platform.x + platform.width &&
-                    player.y + player.height > platform.y &&
-                    player.y + player.height < platform.y + platform.height/2 &&
-                    player.velocityY > 0
-                ) {
-                    player.y = platform.y - player.height;
-                    player.velocityY = 0;
-                    player.isJumping = false;
-                    onPlatform = true;
-                }
-            });
-            
-            // If not on a platform and not jumping, apply gravity
-            if (!onPlatform && player.y + player.height < platforms[0].y) {
-                player.isJumping = true;
-            }
-            
-            // Update moving obstacles
-            movingObstacles.forEach(obstacle => {
-                obstacle.x += obstacle.speedX * obstacle.direction;
-                
-                if (obstacle.x <= obstacle.minX || obstacle.x + obstacle.width >= obstacle.maxX) {
-                    obstacle.direction *= -1;
-                }
-                
-                // Check collision with player
-                if (checkCollision(player, obstacle)) {
-                    hearts--;
-                    heartsDisplay.textContent = hearts;
+            <div class="content">
+                <div class="tappa-info">
+                    <h3>Tappa attuale: 1 - Filippine</h3>
+                    <p>Data ultima puntata: 06/03/2025</p>
+                </div>
+                <!-- Tab Home -->
+                <div id="home-tab" class="tab-content active">
+                    <h2>I Concorrenti</h2>
                     
-                    // Push player away
-                    player.x += obstacle.direction * -20;
+                    <div class="contestant-cards">
+                        <div class="contestant-card">
+                            <div class="contestant-img">💇</div>
+                            <div class="contestant-name">Gli Estetici</div>
+                        </div>
+                        
+                        <div class="contestant-card">
+                            <div class="contestant-img">👯</div>
+                            <div class="contestant-name">Le Sorelle</div>
+                        </div>
+                        
+                        <div class="contestant-card">
+                            <div class="contestant-img">🎬</div>
+                            <div class="contestant-name">I Cineasti</div>
+
+                        </div>
+                        
+                        <div class="contestant-card">
+                            <div class="contestant-img">🎭</div>
+                            <div class="contestant-name">Gli Spettacolari</div>
+        
+                        </div>
+                        
+                        <div class="contestant-card">
+                            <div class="contestant-img">💃</div>
+                            <div class="contestant-name">I Primi Ballerini</div>
+               
+                        </div>
+                        
+                        <div class="contestant-card">
+                            <div class="contestant-img">✨</div>
+                            <div class="contestant-name">I Magici</div>
+                        </div>
+                        
+                        <div class="contestant-card">
+                            <div class="contestant-img">🏅</div>
+                            <div class="contestant-name">I Medagliati</div>
+                        </div>
+                        
+                        <div class="contestant-card">
+                            <div class="contestant-img">🌊</div>
+                            <div class="contestant-name">Le Atlantiche</div>
+
+                        </div>
+                        
+                        <div class="contestant-card">
+                            <div class="contestant-img">🤝</div>
+                            <div class="contestant-name">I Complici</div>
+     
+                        </div>
+                    </div>
                     
-                    if (hearts <= 0) {
-                        gameOver();
-                    }
-                }
-            });
+                    
             
-            // Check collectible collisions
-            collectibles.forEach(collectible => {
-                if (!collectible.collected && checkCollision(player, collectible)) {
-                    collectible.collected = true;
-                    hearts++;
-                    heartsDisplay.textContent = hearts;
+                </div>
+                
+                <!-- Tab Classifica -->
+                <div id="ranking-tab">
+                    
+ 
+                    
+                    <table class="ranking-table">
+   
+                        <tbody id="saved-data-container">
+                            <!-- La tabella verrà popolata dinamicamente con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Tab Assegna Punti -->
+                <div id="points-tab">
+                    <h2>Assegna Punti alle Coppie</h2>
+                    <p>Inserisci i punti guadagnati dalle coppie in base alle loro azioni durante l'ultima puntata.</p>
+                    
+                    <div class="points-form">
+                        <h3>Nuova Azione</h3>
+                        <form id="points-assignment-form">
+                            <div class="form-row">
+                                <label class="form-label">Coppia:</label>
+                                <select class="form-select" id="couple-select" required>
+                                    <option value="">Seleziona una coppia</option>
+                                    <option value="Gli Estetici">Gli Estetici</option>
+                                    <option value="Le Sorelle">Le Sorelle</option>
+                                    <option value="I Cineasti">I Cineasti</option>
+                                    <option value="Gli Spettacolari">Gli Spettacolari</option>
+                                    <option value="I Primi Ballerini">I Primi Ballerini</option>
+                                    <option value="I Magici">I Magici</option>
+                                    <option value="I Medagliati">I Medagliati</option>
+                                    <option value="Le Atlantiche">Le Atlantiche</option>
+                                    <option value="I Complici">I Complici</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-row">
+                                <label class="form-label">Azione:</label>
+                                <select class="form-select" id="action-select" required>
+                                    <option value="">Seleziona un'azione</option>
+                                    <option value="Qualificazione prova immunità">Qualificazione prova immunità (+10)</option>
+                                    <option value="Vittoria prova immunità">Vittoria prova immunità (+20)</option>
+                                    <option value="Prima coppia a trovare alloggio per la notte">Prima coppia a trovare alloggio per la notte (+5)</option>
+                                    <option value="Coppia vincitrice di tappa">Coppia vincitrice di tappa (+30)</option>
+                                    <option value="Qualificazione in finale">Qualificazione in finale (+30)</option>
+                                    <option value="Coppia nella finalissima a 2">Coppia nella finalissima a 2 (+50)</option>
+                                    <option value="Seconda classificata di Pechino express">Seconda classificata di Pechino express (+75)</option>
+                                    <option value="Coppia vincitrice di Pechino Express">Coppia vincitrice di Pechino Express (+100)</option>
+                                    <option value="Prima coppia eliminata">Prima coppia eliminata (+20)</option>
+                                    <option value="Coppia eliminata ma salvata dalla busta rossa">Coppia eliminata ma salvata dalla busta rossa (+10)</option>
+                                    <option value="Abbraccio a Costantino">Abbraccio a Costantino (+5)</option>
+                                    <option value="Abbraccio a Fru">Abbraccio a Fru (+5)</option>
+                                    <option value="Incontro con connazionale">Incontro con connazionale (+10)</option>
+                                    <option value="Alla coppia viene offerto l’hotel">Alla coppia viene offerto l’hotel (+10)</option>
+                                    <option value="Alla coppia viene pagato il passaggio">Alla coppia viene pagato il passaggio (+10)</option>
+                                    <option value="La famiglia ospitante dà il passaggio la mattina dopo">La famiglia ospitante dà il passaggio la mattina dopo (+5)</option>
+                                    <option value="Il passaggio attende lo svolgersi delle missioni">Il passaggio attende lo svolgersi delle missioni (+5)</option>
+                                    <option value="Commozione">Commozione (+5)</option>
+                                    <option value="Passaggio condiviso (alla coppia ospitante)">Passaggio condiviso (alla coppia ospitante) (+10)</option>
+                                    
+                                    <!-- Malus -->
+                                    <option value="Passaggio rubato da un’altra coppia">Passaggio rubato da un’altra coppia (-10)</option>
+                                    <option value="Bandiera nera nel corso della tappa">Bandiera nera nel corso della tappa (-5)</option>
+                                    <option value="Ultima coppia con bandiera nera">Ultima coppia con bandiera nera (-20)</option>
+                                    <option value="Ultima coppia a trovare alloggio per la notte">Ultima coppia a trovare alloggio per la notte (-5)</option>
+                                    <option value="Vomito, malessere o infortunio">Vomito, malessere o infortunio (-20)</option>
+                                    <option value="Coppia che ripete prova dei 7 mostri">Coppia che ripete prova dei 7 mostri (-10)</option>
+                                    <option value="Coppia ultima classificata di tappa">Coppia ultima classificata di tappa (-10)</option>
+                                    <option value="La coppia riceve qualsiasi tipo di malus durante la tappa">La coppia riceve qualsiasi tipo di malus durante la tappa (-5)</option>
+                                    <option value="I membri della coppia litigano tra loro">I membri della coppia litigano tra loro (-5)</option>
+                                    <option value="Coppia perde la mappa">Coppia perde la mappa (-30)</option>
+                                    <option value="Costretto ad abbandonare il gioco">Costretto ad abbandonare il gioco (-50)</option>
+                                    <option value="Rifiuto prova">Rifiuto prova (-30)</option>
+                                    <option value="Ammonizione Costantino">Ammonizione Costantino (-10)</option>
+                                    <option value="A rischio eliminazione">A rischio eliminazione (-10)</option>
+                                    
+                                </select>
+                            </div>
+                            
+                            <div class="form-row">
+                                <label class="form-label">Tappa:</label>
+                                <select class="form-select" id="tappa-select" required>
+                                    <option value="Tappa 1">Tappa 1</option>
+                                    <option value="Tappa 2">Tappa 2</option>
+                                    <option value="Tappa 3" selected>Tappa 3</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-row">
+                                <label class="form-label">Data:</label>
+                                <input type="date" class="form-input" id="action-date" value="2025-03-02" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <label class="form-label">Note (opzionale):</label>
+                                <input type="text" class="form-input" id="action-notes" placeholder="Inserisci eventuali note...">
+                            </div>
+                            
+                            <button type="submit" class="submit-btn">Salva Punti</button>
+                        </form>
+                    </div>
+                    
+                    <div class="bonus-section">
+                        <h2>Bonus e Malus</h2>
+                        <table class="bonus-table">
+                            <thead>
+                                <tr>
+                                    <th>Azione</th>
+                                    <th>Punti</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Qualificazione prova immunità</td>
+                                    <td>+10</td>
+                                </tr>
+                                <tr>
+                                    <td>Vittoria prova immunità</td>
+                                    <td>+20</td>
+                                </tr>
+                                <tr>
+                                    <td>Prima coppia a trovare alloggio per la notte</td>
+                                    <td>+5</td>
+                                </tr>
+                                <tr>
+                                    <td>Coppia vincitrice di tappa</td>
+                                    <td>+30</td>
+                                </tr>
+                                <tr>
+                                    <td>Qualificazione in finale</td>
+                                    <td>+30</td>
+                                </tr>
+                                <tr>
+                                    <td>Coppia nella finalissima a 2</td>
+                                    <td>+50</td>
+                                </tr>
+                                <tr>
+                                    <td>Seconda classificata di Pechino express</td>
+                                    <td>+75</td>
+                                </tr>
+                                <tr>
+                                    <td>Coppia vincitrice di Pechino Express</td>
+                                    <td>+100</td>
+                                </tr>
+                                <tr>
+                                    <td>Prima coppia eliminata</td>
+                                    <td>+20</td>
+                                </tr>
+                                <tr>
+                                    <td>Coppia eliminata ma salvata dalla busta rossa</td>
+                                    <td>+10</td>
+                                </tr>
+                                <tr>
+                                    <td>Abbraccio a Costantino</td>
+                                    <td>+5</td>
+                                </tr>
+                                <tr>
+                                    <td>Abbraccio a Fru</td>
+                                    <td>+5</td>
+                                </tr>
+                                <tr>
+                                    <td>Incontro con connazionale</td>
+                                    <td>+10</td>
+                                </tr>
+                                <tr>
+                                    <td>Alla coppia viene offerto l’hotel</td>
+                                    <td>+10</td>
+                                </tr>
+                                <tr>
+                                    <td>Alla coppia viene pagato il passaggio</td>
+                                    <td>+10</td>
+                                </tr>
+                                <tr>
+                                    <td>La famiglia ospitante dà il passaggio la mattina dopo</td>
+                                    <td>+5</td>
+                                </tr>
+                                <tr>
+                                    <td>Il passaggio attende lo svolgersi delle missioni</td>
+                                    <td>+5</td>
+                                </tr>
+                                <tr>
+                                    <td>Commozione</td>
+                                    <td>+5</td>
+                                </tr>
+                                <tr>
+                                    <td>Passaggio condiviso (alla coppia ospitante)</td>
+                                    <td>+10</td>
+                                </tr>
+                                <tr>
+                                    <td>Passaggio rubato da un’altra coppia</td>
+                                    <td>-10</td>
+                                </tr>
+                                <tr>
+                                    <td>Bandiera nera nel corso della tappa</td>
+                                    <td>-5</td>
+                                </tr>
+                                <tr>
+                                    <td>Ultima coppia con bandiera nera</td>
+                                    <td>-20</td>
+                                </tr>
+                                <tr>
+                                    <td>Ultima coppia a trovare alloggio per la notte</td>
+                                    <td>-5</td>
+                                </tr>
+                                <tr>
+                                    <td>Vomito, malessere o infortunio</td>
+                                    <td>-20</td>
+                                </tr>
+                                <tr>
+                                    <td>Coppia che ripete prova dei 7 mostri</td>
+                                    <td>-10</td>
+                                </tr>
+                                <tr>
+                                    <td>Coppia ultima classificata di tappa</td>
+                                    <td>-10</td>
+                                </tr>
+                                <tr>
+                                    <td>La coppia riceve qualsiasi tipo di malus durante la tappa</td>
+                                    <td>-5</td>
+                                </tr>
+                                <tr>
+                                    <td>I membri della coppia litigano tra loro</td>
+                                    <td>-5</td>
+                                </tr>
+                                <tr>
+                                    <td>Coppia perde la mappa</td>
+                                    <td>-30</td>
+                                </tr>
+                                <tr>
+                                    <td>Costretto ad abbandonare il gioco</td>
+                                    <td>-50</td>
+                                </tr>
+                                <tr>
+                                    <td>Rifiuto prova</td>
+                                    <td>-30</td>
+                                </tr>
+                                <tr>
+                                    <td>Ammonizione Costantino</td>
+                                    <td>-10</td>
+                                </tr>
+                                <tr>
+                                    <td>A rischio eliminazione</td>
+                                    <td>-10</td>
+                                </tr>                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 FantaPechino - Il gioco non ufficiale di Pechino Express</p>
+        <div class="social-links">
+            <a href="#">📱</a>
+            <a href="#">💬</a>
+            <a href="#">📸</a>
+        </div>
+    </footer>
+
+    <script type="module">
+          // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+  import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBok_FwYyiDQ42X8LM8oAr7-lKrCDuPW8o",
+    authDomain: "pechino-c5c66.firebaseapp.com",
+    projectId: "pechino-c5c66",
+    storageBucket: "pechino-c5c66.firebasestorage.app",
+    messagingSenderId: "761661899518",
+    appId: "1:761661899518:web:da75eb4c6b5ed53ef81baf",
+    databaseURL: "https://pechino-c5c66-default-rtdb.europe-west1.firebasedatabase.app/"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  
+
+  function saveToFirebase(data) {
+
+
+    // Save data to Firebase
+    set(ref(db, data.id.toString()), data)
+        .then(() => {
+            console.log("Data saved successfully!");
+        })
+        .catch(error => {
+            console.error("Error saving data:", error);
+        });
+}
+function loadTableData() {
+      const dbRef = ref(db);
+      get((dbRef)).then(snapshot => {
+          if (snapshot.exists()) {
+              const data = snapshot.val();
+              const tbody = document.querySelector("#saved-data-container");
+              tbody.innerHTML = ""; // Clear existing rows
+
+              for (const couple in data) {
+                if (data.hasOwnProperty(couple)) {
+                    const item = data[couple];
+                    const row = `<tr>
+                        <td>${item.position}</td>
+                        <td>${item.couple}</td>
+                        <td>${item.points}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
                 }
-            });
-            
-            // Check win condition
-            if (checkCollision(player, bride)) {
-                winGame();
             }
-        }
+          } else {
+              console.log("No data available.");
+          }
+      }).catch(error => console.error("Error loading data:", error));
+  }
 
-        // Collision detection helper
-        function checkCollision(obj1, obj2) {
-            return (
-                obj1.x < obj2.x + obj2.width &&
-                obj1.x + obj1.width > obj2.x &&
-                obj1.y < obj2.y + obj2.height &&
-                obj1.y + obj1.height > obj2.y
-            );
-        }
+  window.onload = () => {
+      loadTableData();
+      calculateTotalPoints();
+  };
+ // Points values mapping
+ const pointsValues = {
+    "Qualificazione prova immunità": +10,
+    "Vittoria prova immunità": +20,
+    "Prima coppia a trovare alloggio per la notte": +5,
+    "Coppia vincitrice di tappa": +30,
+    "Qualificazione in finale": +30,
+    "Coppia nella finalissima a 2": +50,
+    "Seconda classificata di Pechino express": +75,
+    "Coppia vincitrice di Pechino Express": +100,
+    "Prima coppia eliminata": +20,
+    "Coppia eliminata ma salvata dalla busta rossa": +10,
+    "Abbraccio a Costantino": +5,
+    "Abbraccio a Fru": +5,
+    "Incontro con connazionale": +10,
+    "Alla coppia viene offerto l’hotel": +10,
+    "Alla coppia viene pagato il passaggio": +10,
+    "La famiglia ospitante dà il passaggio la mattina dopo": +5,
+    "Il passaggio attende lo svolgersi delle missioni": +5,
+    "Commozione": +5,
+    "Passaggio condiviso (alla coppia ospitante)": +10,
 
-        // Draw game elements
-        function draw() {
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Background elements
-            drawClouds();
-            drawChurch();
-            
-            // Draw platforms
-            platforms.forEach(platform => {
-                ctx.fillStyle = platform.color;
-                ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
-            });
-            
-            // Draw obstacles
-            obstacles.forEach(obstacle => {
-                ctx.fillStyle = obstacle.color;
-                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-            });
-            
-            // Draw moving obstacles (guests)
-            movingObstacles.forEach(obstacle => {
-                // Body
-                ctx.fillStyle = obstacle.color;
-                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-                
-                // Head
-                ctx.fillStyle = obstacle.skinColor;
-                ctx.beginPath();
-                ctx.arc(obstacle.x + obstacle.width/2, obstacle.y - 5, 10, 0, Math.PI*2);
-                ctx.fill();
-                
-                // Eyes
-                ctx.fillStyle = '#000000';
-                ctx.beginPath();
-                ctx.arc(obstacle.x + obstacle.width/2 - 3, obstacle.y - 7, 2, 0, Math.PI*2);
-                ctx.arc(obstacle.x + obstacle.width/2 + 3, obstacle.y - 7, 2, 0, Math.PI*2);
-                ctx.fill();
-                
-                // Smile
-                ctx.beginPath();
-                ctx.arc(obstacle.x + obstacle.width/2, obstacle.y - 3, 4, 0, Math.PI);
-                ctx.stroke();
-                
-                // Hair
-                ctx.fillStyle = '#6D4C41';
-                ctx.fillRect(obstacle.x + obstacle.width/2 - 10, obstacle.y - 15, 20, 7);
-            });
-            
-            // Draw collectibles
-            collectibles.forEach(collectible => {
-                if (!collectible.collected) {
-                    ctx.fillStyle = collectible.color;
-                    if (collectible.type === 'heart') {
-                        drawHeart(collectible.x, collectible.y, collectible.width);
-                    }
-                }
-            });
-            
-            // Draw player (groom)
-            drawGroom();
-            
-            // Draw bride
-            drawBride();
-            
-            // Game over/win screen
-            if (!gameRunning) {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.font = '40px Arial';
-                ctx.fillStyle = '#FFFFFF';
-                ctx.textAlign = 'center';
-                
-                if (gameWon) {
-                    ctx.fillText('Lo sposo è arrivato!', canvas.width/2, canvas.height/2 - 20);
-                    ctx.font = '30px Arial';
-                    ctx.fillText('Congratulazioni!', canvas.width/2, canvas.height/2 + 20);
-                } else {
-                    ctx.fillText('Game Over', canvas.width/2, canvas.height/2 - 20);
-                    ctx.font = '30px Arial';
-                    ctx.fillText('Try again!', canvas.width/2, canvas.height/2 + 20);
-                }
-                
-                ctx.font = '20px Arial';
-                ctx.fillText('', canvas.width/2, canvas.height/2 + 60);
+    // Malus
+    "Passaggio rubato da un’altra coppia": -10,
+    "Bandiera nera nel corso della tappa": -5,
+    "Ultima coppia con bandiera nera": -20,
+    "Ultima coppia a trovare alloggio per la notte": -5,
+    "Vomito, malessere o infortunio": -20,
+    "Coppia che ripete prova dei 7 mostri": -10,
+    "Coppia ultima classificata di tappa": -10,
+    "La coppia riceve qualsiasi tipo di malus durante la tappa": -5,
+    "I membri della coppia litigano tra loro": -5,
+    "Coppia perde la mappa": -30,
+    "Costretto ad abbandonare il gioco": -50,
+    "Rifiuto prova": -30,
+    "Ammonizione Costantino": -10,
+    "A rischio eliminazione": -10
+};
+
+
+        // Initialize data structure
+        let formData = [];
+
+        // Check if data exists in localStorage and load it
+        // if (localStorage.getItem('coupleFormData')) {
+        // formData = JSON.parse(localStorage.getItem('coupleFormData'));
+        // }
+
+        // Function to handle form submission
+        document.getElementById('points-assignment-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Get form values
+        const couple = document.getElementById('couple-select').value;
+        const action = document.getElementById('action-select').value;
+        const tappa = document.getElementById('tappa-select').value;
+        const date = document.getElementById('action-date').value;
+        const notes = document.getElementById('action-notes').value;
+        
+        // Extract points value from the action
+        const points = pointsValues[action.split(' (')[0]] || 0;
+        
+        // Create data entry
+        const entry = {
+            id: Date.now(), // Unique ID for each entry
+            couple,
+            action: action.split(' (')[0], // Remove the points info from display
+            points,
+            tappa,
+            date,
+            notes,
+            timestamp: new Date().toISOString()
+        };
+        
+        // Add to data array
+        formData.push(entry);
+        
+        // Save to localStorage (our "static file" in the browser)
+        
+        saveToFirebase(entry);
+        
+        // Update the display
+        displayFormData();
+        
+        // Reset form
+        this.reset();
+        
+        // Set default values again
+        document.getElementById('tappa-select').value = 'Tappa 3';
+        document.getElementById('action-date').value = '2025-03-02';
+        
+        });
+
+        // Function to calculate total points for each couple
+        function calculateTotalPoints() {
+        const totals = {};
+        
+        formData.forEach(entry => {
+            if (!totals[entry.couple]) {
+            totals[entry.couple] = 0;
             }
-        }
+            totals[entry.couple] += entry.points;
+        });
         
-        // Draw the groom with more realistic features
-        function drawGroom() {
-            // Body/Suit
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            
-            // Neck
-            ctx.fillStyle = player.skinColor;
-            ctx.fillRect(player.x + player.width/2 - 5, player.y, 10, 10);
-            
-            // Head
-            ctx.fillStyle = player.skinColor;
-            ctx.beginPath();
-            ctx.arc(player.x + player.width/2, player.y - 10, 15, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Short brown hair
-            ctx.fillStyle = player.hairColor;
-            ctx.beginPath();
-            ctx.arc(player.x + player.width/2, player.y - 18, 12, Math.PI, 0);
-            ctx.fill();
-            
-            // Side hair
-            ctx.fillRect(player.x + player.width/2 - 15, player.y - 20, 5, 15); // Left side
-            ctx.fillRect(player.x + player.width/2 + 10, player.y - 20, 5, 15); // Right side
-            
-            // Eyes
-            ctx.fillStyle = '#000000';
-            ctx.beginPath();
-            ctx.arc(player.x + player.width/2 - 5, player.y - 12, 2, 0, Math.PI*2);
-            ctx.arc(player.x + player.width/2 + 5, player.y - 12, 2, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Mouth
-            ctx.beginPath();
-            ctx.arc(player.x + player.width/2, player.y - 5, 5, 0, Math.PI);
-            ctx.stroke();
-            
-            // White shirt under suit
-            ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(player.x + player.width/2 - 5, player.y + 10, 10, 20);
-            
-            // Bow tie
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(player.x + player.width/2 - 7, player.y + 8, 14, 5);
-            ctx.beginPath();
-            ctx.arc(player.x + player.width/2, player.y + 10, 3, 0, Math.PI*2);
-            ctx.fill();
-        }
-        
-        // Draw the bride with more realistic features
-        function drawBride() {
-            // Dress
-            ctx.fillStyle = bride.color;
-            ctx.fillRect(bride.x, bride.y, bride.width, bride.height);
-            
-            // Neck
-            ctx.fillStyle = bride.skinColor;
-            ctx.fillRect(bride.x + bride.width/2 - 5, bride.y, 10, 10);
-            
-            // Head
-            ctx.fillStyle = bride.skinColor;
-            ctx.beginPath();
-            ctx.arc(bride.x + bride.width/2, bride.y - 10, 15, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Short curly black hair
-            ctx.fillStyle = bride.hairColor;
-            
-            // Base hair layer
-            ctx.beginPath();
-            ctx.arc(bride.x + bride.width/2, bride.y - 18, 13, Math.PI, 0);
-            ctx.fill();
-            
-            // Curls - multiple small arcs
-            for (let i = 4; i < 8; i++) {
-                const angle = i * Math.PI / 4;
-                const radius = 15;
-                const x = bride.x + bride.width/2 + Math.cos(angle) * radius;
-                const y = bride.y - 15 + Math.sin(angle) * radius;
-                
-                ctx.beginPath();
-                ctx.arc(x, y, 5, 0, Math.PI*2);
-                ctx.fill();
-            }
-            
-            // Eyes
-            ctx.fillStyle = '#000000';
-            ctx.beginPath();
-            ctx.arc(bride.x + bride.width/2 - 5, bride.y - 12, 2, 0, Math.PI*2);
-            ctx.arc(bride.x + bride.width/2 + 5, bride.y - 12, 2, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Smiling mouth
-            ctx.beginPath();
-            ctx.arc(bride.x + bride.width/2, bride.y - 5, 5, 0, Math.PI);
-            ctx.stroke();
-            
-            // Veil
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.beginPath();
-            ctx.arc(bride.x + bride.width/2, bride.y - 15, 18, Math.PI, 0);
-            ctx.fill();
-            
-            // Bouquet
-            ctx.fillStyle = '#FF69B4';
-            ctx.beginPath();
-            ctx.arc(bride.x + 10, bride.y + 40, 10, 0, Math.PI*2);
-            ctx.arc(bride.x + 5, bride.y + 35, 7, 0, Math.PI*2);
-            ctx.arc(bride.x + 15, bride.y + 35, 7, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Bouquet stem
-            ctx.fillStyle = '#4CAF50';
-            ctx.fillRect(bride.x + 8, bride.y + 40, 4, 15);
-        }
-        
-        // Draw clouds
-        function drawClouds() {
-            ctx.fillStyle = '#FFFFFF';
-            
-            // Cloud 1
-            ctx.beginPath();
-            ctx.arc(100, 80, 30, 0, Math.PI*2);
-            ctx.arc(130, 90, 25, 0, Math.PI*2);
-            ctx.arc(160, 80, 20, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Cloud 2
-            ctx.beginPath();
-            ctx.arc(500, 60, 25, 0, Math.PI*2);
-            ctx.arc(530, 70, 30, 0, Math.PI*2);
-            ctx.arc(560, 60, 20, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Cloud 3
-            ctx.beginPath();
-            ctx.arc(300, 100, 20, 0, Math.PI*2);
-            ctx.arc(330, 100, 25, 0, Math.PI*2);
-            ctx.arc(350, 90, 15, 0, Math.PI*2);
-            ctx.fill();
-        }
-        
-        // Draw church in the background
-        function drawChurch() {
-            // Church body
-            ctx.fillStyle = '#F5F5F5';
-            ctx.fillRect(650, 80, 100, 140);
-            
-            // Church roof
-            ctx.fillStyle = '#8D6E63';
-            ctx.beginPath();
-            ctx.moveTo(640, 80);
-            ctx.lineTo(700, 40);
-            ctx.lineTo(760, 80);
-            ctx.fill();
-            
-            // Church tower
-            ctx.fillStyle = '#F5F5F5';
-            ctx.fillRect(690, 30, 20, 50);
-            
-            // Church door
-            ctx.fillStyle = '#5D4037';
-            ctx.fillRect(685, 180, 30, 40);
-            
-            // Church windows
-            ctx.fillStyle = '#B3E5FC';
-            ctx.fillRect(665, 110, 20, 30);
-            ctx.fillRect(715, 110, 20, 30);
-        }
-        
-        // Draw heart for collectibles
-        function drawHeart(x, y, size) {
-            ctx.fillStyle = '#FF0000';
-            ctx.beginPath();
-            ctx.moveTo(x + size/2, y + size/4);
-            ctx.bezierCurveTo(
-                x + size/2, y, 
-                x, y, 
-                x, y + size/4
-            );
-            ctx.bezierCurveTo(
-                x, y + size/2, 
-                x + size/2, y + size, 
-                x + size/2, y + size
-            );
-            ctx.bezierCurveTo(
-                x + size/2, y + size, 
-                x + size, y + size/2, 
-                x + size, y + size/4
-            );
-            ctx.bezierCurveTo(
-                x + size, y, 
-                x + size/2, y, 
-                x + size/2, y + size/4
-            );
-            ctx.fill();
+        return totals;
         }
 
-        // Game over function
-        function gameOver() {
-            gameRunning = false;
-            clearInterval(gameTimer);
+        // Function to display the saved data
+        function displayFormData() {
+        const dataContainer = document.getElementById('saved-data-container');
+        
+        if (!dataContainer) {
+            console.error('Data container not found');
+            return;
         }
         
-        // Win game function
-        function winGame() {
-            gameRunning = false;
-            gameWon = true;
-            clearInterval(gameTimer);
+        if (formData.length === 0) {
+            dataContainer.innerHTML = '<p>Nessun dato salvato.</p>';
+            return;
+        }
+        
+        // Calculate totals
+        const totals = calculateTotalPoints();
+        
+        // Create standings table
+        let standingsHtml = `
+            <div class="data-section">
+            <h2>Classifica</h2>
+            <table class="data-table standings-table">
+                <thead>
+                <tr>
+                    <th>Posizione</th>
+                    <th>Coppia</th>
+                    <th>Punti Totali</th>
+                </tr>
+                </thead>
+                <tbody>
+        `;
+        
+        // Sort couples by points (descending)
+        const sortedCouples = Object.keys(totals).sort((a, b) => totals[b] - totals[a]);
+        
+        sortedCouples.forEach((couple, index) => {
+            standingsHtml += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${couple}</td>
+                <td>${totals[couple]}</td>
+            </tr>
+            `;
+        });
+        
+        standingsHtml += `
+                </tbody>
+            </table>
+            </div>
+        `;
+        
+        // Create events table
+        let eventsHtml = `
+            <div class="data-section">
+            <h2>Registro Eventi</h2>
+            <table class="data-table events-table">
+                <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Coppia</th>
+                    <th>Tappa</th>
+                    <th>Azione</th>
+                    <th>Punti</th>
+                    <th>Note</th>
+                    <th>Azioni</th>
+                </tr>
+                </thead>
+                <tbody>
+        `;
+        
+        // Sort events by date (most recent first)
+        const sortedEvents = [...formData].sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        sortedEvents.forEach(entry => {
+            const formattedDate = new Date(entry.date).toLocaleDateString('it-IT');
+            
+            eventsHtml += `
+            <tr>
+                <td>${formattedDate}</td>
+                <td>${entry.couple}</td>
+                <td>${entry.tappa}</td>
+                <td>${entry.action}</td>
+                <td class="${entry.points >= 0 ? 'positive' : 'negative'}">${entry.points >= 0 ? '+' : ''}${entry.points}</td>
+                <td>${entry.notes || '-'}</td>
+                <td>
+                <button class="delete-btn" onclick="deleteEntry(${entry.id})">Elimina</button>
+                </td>
+            </tr>
+            `;
+        });
+        
+        eventsHtml += `
+                </tbody>
+            </table>
+            </div>
+        `;
+        
+        // Update the container
+        dataContainer.innerHTML = standingsHtml + eventsHtml;
         }
 
-        // Game loop
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
 
-        // Start the game
-        gameLoop();
-    </script>
-</body>
-</html>
+        // Initialize the display when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+        displayFormData();
+        });
+        </script>
