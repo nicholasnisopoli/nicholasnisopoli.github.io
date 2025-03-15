@@ -544,7 +544,7 @@
             <div class="content">
                 <div class="tappa-info">
                     <h3>Tappa attuale: 1 - Filippine</h3>
-                    <p>Data ultima puntata: 06/03/2025</p>
+                    <p>Data ultima puntata: 13/03/2025</p>
                 </div>
                 <!-- Tab Home -->
                 <div id="home-tab" class="tab-content active">
@@ -890,260 +890,274 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  
+  let formData = [];
 
-  function saveToFirebase(data) {
-
-
-    // Save data to Firebase
-    set(ref(db, data.id.toString()), data)
-        .then(() => {
-            console.log("Data saved successfully!");
-        })
-        .catch(error => {
-            console.error("Error saving data:", error);
-        });
+function saveToFirebase(data) {
+  // Save data to Firebase
+  set(ref(db, data.id.toString()), data)
+    .then(() => {
+      console.log("Data saved successfully!");
+      // Reload the data after saving
+      loadDataFromFirebase();
+    })
+    .catch(error => {
+      console.error("Error saving data:", error);
+    });
 }
-function loadTableData() {
-      const dbRef = ref(db);
-      get((dbRef)).then(snapshot => {
-          if (snapshot.exists()) {
-              const data = snapshot.val();
-              const tbody = document.querySelector("#saved-data-container");
-              tbody.innerHTML = ""; // Clear existing rows
 
-              for (const couple in data) {
-                if (data.hasOwnProperty(couple)) {
-                    const item = data[couple];
-                    const row = `<tr>
-                        <td>${item.position}</td>
-                        <td>${item.couple}</td>
-                        <td>${item.points}</td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-                }
-            }
-          } else {
-              console.log("No data available.");
-          }
-      }).catch(error => console.error("Error loading data:", error));
+function loadDataFromFirebase() {
+  const dbRef = ref(db);
+  get(dbRef).then(snapshot => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      formData = []; // Clear existing data
+      
+      // Convert Firebase object to array
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          formData.push(data[key]);
+        }
+      }
+      
+      // Update both tables
+      displayFormData();
+    } else {
+      console.log("No data available.");
+      formData = [];
+      displayFormData();
+    }
+  }).catch(error => console.error("Error loading data:", error));
+}
+
+// Function to calculate total points for each couple
+function calculateTotalPoints() {
+  const totals = {};
+  
+  formData.forEach(entry => {
+    if (!totals[entry.couple]) {
+      totals[entry.couple] = 0;
+    }
+    totals[entry.couple] += entry.points;
+  });
+  
+  return totals;
+}
+
+// Function to display the saved data
+function displayFormData() {
+  const dataContainer = document.getElementById('saved-data-container');
+  
+  if (!dataContainer) {
+    console.error('Data container not found');
+    return;
   }
+  
+  if (formData.length === 0) {
+    dataContainer.innerHTML = '<tr><td colspan="3">Nessun dato salvato.</td></tr>';
+    return;
+  }
+  
+  // Calculate totals
+  const totals = calculateTotalPoints();
+  
+  // Sort couples by points (descending)
+  const sortedCouples = Object.keys(totals).sort((a, b) => totals[b] - totals[a]);
+  
+  // Create standings table HTML
+  let standingsHtml = '';
+  
+  sortedCouples.forEach((couple, index) => {
+    const position = index + 1;
+    let positionClass = '';
+    
+    if (position === 1) positionClass = 'first';
+    else if (position === 2) positionClass = 'second';
+    else if (position === 3) positionClass = 'third';
+    
+    standingsHtml += `
+      <tr>
+        <td class="ranking-position ${positionClass}">${position}</td>
+        <td>${couple}</td>
+        <td><span class="points-badge">${totals[couple]}</span></td>
+      </tr>
+    `;
+  });
+  
+  // Update the standings table
+  dataContainer.innerHTML = standingsHtml;
+  
+  // Now handle the events table
+  const eventsTableContainer = document.getElementById('events-table-container');
+  
+  // If events container doesn't exist, create it
+  if (!eventsTableContainer) {
+    const eventsSection = document.createElement('div');
+    eventsSection.id = 'events-section';
+    eventsSection.classList.add('stats-section');
+    
+    eventsSection.innerHTML = `
+      <h2>Registro Eventi</h2>
+      <table class="ranking-table events-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Coppia</th>
+            <th>Tappa</th>
+            <th>Azione</th>
+            <th>Punti</th>
+            <th>Note</th>
+            <th>Azioni</th>
+          </tr>
+        </thead>
+        <tbody id="events-table-container">
+        </tbody>
+      </table>
+    `;
+    
+    // Add events section after the ranking tab
+    const rankingTab = document.getElementById('ranking-tab');
+    rankingTab.parentNode.insertBefore(eventsSection, rankingTab.nextSibling);
+  }
+  
+  // Get the events container again (it might have been created)
+  const eventsContainer = document.getElementById('events-table-container');
+  
+  if (eventsContainer) {
+    // Sort events by date (most recent first)
+    const sortedEvents = [...formData].sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    let eventsHtml = '';
+    
+    sortedEvents.forEach(entry => {
+      const formattedDate = new Date(entry.date).toLocaleDateString('it-IT');
+      
+      eventsHtml += `
+        <tr>
+          <td>${formattedDate}</td>
+          <td>${entry.couple}</td>
+          <td>${entry.tappa}</td>
+          <td>${entry.action}</td>
+          <td class="${entry.points >= 0 ? 'positive' : 'negative'}">${entry.points >= 0 ? '+' : ''}${entry.points}</td>
+          <td>${entry.notes || '-'}</td>
+          <td>
+            <button class="delete-btn" onclick="deleteEntry('${entry.id}')">Elimina</button>
+          </td>
+        </tr>
+      `;
+    });
+    
+    eventsContainer.innerHTML = eventsHtml;
+  }
+}
 
-  window.onload = () => {
-      loadTableData();
-      calculateTotalPoints();
-  };
- // Points values mapping
- const pointsValues = {
-    "Qualificazione prova immunità": +10,
-    "Vittoria prova immunità": +20,
-    "Prima coppia a trovare alloggio per la notte": +5,
-    "Coppia vincitrice di tappa": +30,
-    "Qualificazione in finale": +30,
-    "Coppia nella finalissima a 2": +50,
-    "Seconda classificata di Pechino express": +75,
-    "Coppia vincitrice di Pechino Express": +100,
-    "Prima coppia eliminata": +20,
-    "Coppia eliminata ma salvata dalla busta rossa": +10,
-    "Abbraccio a Costantino": +5,
-    "Abbraccio a Fru": +5,
-    "Incontro con connazionale": +10,
-    "Alla coppia viene offerto l’hotel": +10,
-    "Alla coppia viene pagato il passaggio": +10,
-    "La famiglia ospitante dà il passaggio la mattina dopo": +5,
-    "Il passaggio attende lo svolgersi delle missioni": +5,
-    "Commozione": +5,
-    "Passaggio condiviso (alla coppia ospitante)": +10,
+// Function to delete an entry
+function deleteEntry(entryId) {
+  // Remove from Firebase
+  set(ref(db, entryId.toString()), null)
+    .then(() => {
+      console.log("Entry deleted successfully!");
+      // Reload the data
+      loadDataFromFirebase();
+    })
+    .catch(error => {
+      console.error("Error deleting entry:", error);
+    });
+}
 
-    // Malus
-    "Passaggio rubato da un’altra coppia": -10,
-    "Bandiera nera nel corso della tappa": -5,
-    "Ultima coppia con bandiera nera": -20,
-    "Ultima coppia a trovare alloggio per la notte": -5,
-    "Vomito, malessere o infortunio": -20,
-    "Coppia che ripete prova dei 7 mostri": -10,
-    "Coppia ultima classificata di tappa": -10,
-    "La coppia riceve qualsiasi tipo di malus durante la tappa": -5,
-    "I membri della coppia litigano tra loro": -5,
-    "Coppia perde la mappa": -30,
-    "Costretto ad abbandonare il gioco": -50,
-    "Rifiuto prova": -30,
-    "Ammonizione Costantino": -10,
-    "A rischio eliminazione": -10
+// Expose functions to global scope for event handlers
+window.deleteEntry = deleteEntry;
+
+// Points values mapping
+const pointsValues = {
+  "Qualificazione prova immunità": +10,
+  "Vittoria prova immunità": +20,
+  "Prima coppia a trovare alloggio per la notte": +5,
+  "Coppia vincitrice di tappa": +30,
+  "Qualificazione in finale": +30,
+  "Coppia nella finalissima a 2": +50,
+  "Seconda classificata di Pechino express": +75,
+  "Coppia vincitrice di Pechino Express": +100,
+  "Prima coppia eliminata": +20,
+  "Coppia eliminata ma salvata dalla busta rossa": +10,
+  "Abbraccio a Costantino": +5,
+  "Abbraccio a Fru": +5,
+  "Incontro con connazionale": +10,
+  "Alla coppia viene offerto l'hotel": +10,
+  "Alla coppia viene pagato il passaggio": +10,
+  "La famiglia ospitante dà il passaggio la mattina dopo": +5,
+  "Il passaggio attende lo svolgersi delle missioni": +5,
+  "Commozione": +5,
+  "Passaggio condiviso (alla coppia ospitante)": +10,
+
+  // Malus
+  "Passaggio rubato da un'altra coppia": -10,
+  "Bandiera nera nel corso della tappa": -5,
+  "Ultima coppia con bandiera nera": -20,
+  "Ultima coppia a trovare alloggio per la notte": -5,
+  "Vomito, malessere o infortunio": -20,
+  "Coppia che ripete prova dei 7 mostri": -10,
+  "Coppia ultima classificata di tappa": -10,
+  "La coppia riceve qualsiasi tipo di malus durante la tappa": -5,
+  "I membri della coppia litigano tra loro": -5,
+  "Coppia perde la mappa": -30,
+  "Costretto ad abbandonare il gioco": -50,
+  "Rifiuto prova": -30,
+  "Ammonizione Costantino": -10,
+  "A rischio eliminazione": -10
 };
 
+// Function to handle form submission
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('points-assignment-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    // Get form values
+    const couple = document.getElementById('couple-select').value;
+    const action = document.getElementById('action-select').value;
+    const tappa = document.getElementById('tappa-select').value;
+    const date = document.getElementById('action-date').value;
+    const notes = document.getElementById('action-notes').value;
+    
+    // Extract points value from the action
+    const actionName = action.split(' (')[0]; // Remove the points info from display
+    const points = pointsValues[actionName] || 0;
+    
+    // Create data entry
+    const entry = {
+      id: Date.now().toString(), // Unique ID for each entry
+      couple,
+      action: actionName,
+      points,
+      tappa,
+      date,
+      notes,
+      timestamp: new Date().toISOString()
+    };
+    
+    // Save to Firebase
+    saveToFirebase(entry);
+    
+    // Reset form
+    this.reset();
+    
+    // Set default values again
+    document.getElementById('tappa-select').value = 'Tappa 3';
+    document.getElementById('action-date').value = '2025-03-02';
+  });
 
-        // Initialize data structure
-        let formData = [];
+  // Tab navigation functions
+  window.showTab = function(tabId) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    
+    // Show the selected tab
+    document.getElementById(tabId).classList.add('active');
+  };
 
-        // Check if data exists in localStorage and load it
-        // if (localStorage.getItem('coupleFormData')) {
-        // formData = JSON.parse(localStorage.getItem('coupleFormData'));
-        // }
-
-        // Function to handle form submission
-        document.getElementById('points-assignment-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        // Get form values
-        const couple = document.getElementById('couple-select').value;
-        const action = document.getElementById('action-select').value;
-        const tappa = document.getElementById('tappa-select').value;
-        const date = document.getElementById('action-date').value;
-        const notes = document.getElementById('action-notes').value;
-        
-        // Extract points value from the action
-        const points = pointsValues[action.split(' (')[0]] || 0;
-        
-        // Create data entry
-        const entry = {
-            id: Date.now(), // Unique ID for each entry
-            couple,
-            action: action.split(' (')[0], // Remove the points info from display
-            points,
-            tappa,
-            date,
-            notes,
-            timestamp: new Date().toISOString()
-        };
-        
-        // Add to data array
-        formData.push(entry);
-        
-        // Save to localStorage (our "static file" in the browser)
-        
-        saveToFirebase(entry);
-        
-        // Update the display
-        displayFormData();
-        
-        // Reset form
-        this.reset();
-        
-        // Set default values again
-        document.getElementById('tappa-select').value = 'Tappa 3';
-        document.getElementById('action-date').value = '2025-03-02';
-        
-        });
-
-        // Function to calculate total points for each couple
-        function calculateTotalPoints() {
-        const totals = {};
-        
-        formData.forEach(entry => {
-            if (!totals[entry.couple]) {
-            totals[entry.couple] = 0;
-            }
-            totals[entry.couple] += entry.points;
-        });
-        
-        return totals;
-        }
-
-        // Function to display the saved data
-        function displayFormData() {
-        const dataContainer = document.getElementById('saved-data-container');
-        
-        if (!dataContainer) {
-            console.error('Data container not found');
-            return;
-        }
-        
-        if (formData.length === 0) {
-            dataContainer.innerHTML = '<p>Nessun dato salvato.</p>';
-            return;
-        }
-        
-        // Calculate totals
-        const totals = calculateTotalPoints();
-        
-        // Create standings table
-        let standingsHtml = `
-            <div class="data-section">
-            <h2>Classifica</h2>
-            <table class="data-table standings-table">
-                <thead>
-                <tr>
-                    <th>Posizione</th>
-                    <th>Coppia</th>
-                    <th>Punti Totali</th>
-                </tr>
-                </thead>
-                <tbody>
-        `;
-        
-        // Sort couples by points (descending)
-        const sortedCouples = Object.keys(totals).sort((a, b) => totals[b] - totals[a]);
-        
-        sortedCouples.forEach((couple, index) => {
-            standingsHtml += `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${couple}</td>
-                <td>${totals[couple]}</td>
-            </tr>
-            `;
-        });
-        
-        standingsHtml += `
-                </tbody>
-            </table>
-            </div>
-        `;
-        
-        // Create events table
-        let eventsHtml = `
-            <div class="data-section">
-            <h2>Registro Eventi</h2>
-            <table class="data-table events-table">
-                <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Coppia</th>
-                    <th>Tappa</th>
-                    <th>Azione</th>
-                    <th>Punti</th>
-                    <th>Note</th>
-                    <th>Azioni</th>
-                </tr>
-                </thead>
-                <tbody>
-        `;
-        
-        // Sort events by date (most recent first)
-        const sortedEvents = [...formData].sort((a, b) => new Date(b.date) - new Date(a.date));
-        
-        sortedEvents.forEach(entry => {
-            const formattedDate = new Date(entry.date).toLocaleDateString('it-IT');
-            
-            eventsHtml += `
-            <tr>
-                <td>${formattedDate}</td>
-                <td>${entry.couple}</td>
-                <td>${entry.tappa}</td>
-                <td>${entry.action}</td>
-                <td class="${entry.points >= 0 ? 'positive' : 'negative'}">${entry.points >= 0 ? '+' : ''}${entry.points}</td>
-                <td>${entry.notes || '-'}</td>
-                <td>
-                <button class="delete-btn" onclick="deleteEntry(${entry.id})">Elimina</button>
-                </td>
-            </tr>
-            `;
-        });
-        
-        eventsHtml += `
-                </tbody>
-            </table>
-            </div>
-        `;
-        
-        // Update the container
-        dataContainer.innerHTML = standingsHtml + eventsHtml;
-        }
-
-
-        // Initialize the display when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-        displayFormData();
-        });
+  // Load data when page loads
+  loadDataFromFirebase();
+});
         </script>
+</body>
