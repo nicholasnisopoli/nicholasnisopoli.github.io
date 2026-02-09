@@ -1,1163 +1,814 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FantaPechino</title>
+    <title>Nicholas Nisopoli - Personal Portfolio</title>
+    <meta name="description" content="Nicholas Nisopoli's personal portfolio showcasing experience, education, publications, awards, and projects in systems architecture and AI research.">
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Work+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #e63946;
-            --secondary-color: #457b9d;
-            --light-color: #f1faee;
-            --dark-color: #1d3557;
-            --accent-color: #a8dadc;
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151b3b;
+            --text-primary: #e8edf5;
+            --text-secondary: #9ca9c9;
+            --accent-teal: #00d9ff;
+            --accent-purple: #a78bfa;
+            --accent-pink: #f472b6;
+            --spacing-unit: 1.5rem;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
         }
-        
-        header {
-            color: black;
-            text-align: center;
-            padding: 1.5rem 0;
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
         }
-        
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
         }
-        
-        .tagline {
-            font-style: italic;
-            font-size: 1.2rem;
-        }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
         }
-        
-        .main-content {
+
+        /* Header */
+        header {
+            padding: 3rem 0 1.5rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero {
+            margin-bottom: 3.5rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+            animation: fadeInUp 1s ease-out 0.4s backwards;
+        }
+
+        .hero .company {
+            font-size: 1.1rem;
+            color: var(--accent-teal);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Section Styles */
+        section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            animation: fadeInSection 0.8s ease-out forwards;
+        }
+
+        section:nth-child(1) { animation-delay: 0.8s; }
+        section:nth-child(2) { animation-delay: 1s; }
+        section:nth-child(3) { animation-delay: 1.2s; }
+        section:nth-child(4) { animation-delay: 1.4s; }
+        section:nth-child(5) { animation-delay: 1.6s; }
+
+        @keyframes fadeInSection {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1.5rem;
+        }
+
+        .section-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--accent-teal);
+            line-height: 1;
+            opacity: 0.5;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(21, 27, 59, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.25rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(167, 139, 250, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-teal);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+            gap: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.35rem;
+        }
+
+        .card-subtitle {
+            color: var(--accent-teal);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .card-date {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            margin-top: 0.75rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .card-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .sidebar {
-            flex: 1;
-            min-width: 250px;
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .content {
-            flex: 3;
-            min-width: 300px;
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .sidebar h2, .content h2 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-        }
-        
-        .nav-links {
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .nav-links a {
-            display: block;
-            padding: 0.5rem;
-            text-decoration: none;
-            color: var(--dark-color);
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .nav-links a:hover {
-            background-color: var(--accent-color);
-            padding-left: 1rem;
-        }
-        
-        .contestant-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
+            gap: 0.5rem;
             margin-top: 1rem;
         }
-        
-        .contestant-card {
-            background-color: var(--light-color);
+
+        .tag {
+            padding: 0.3rem 0.85rem;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--accent-teal);
+            font-weight: 500;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .project-card {
+            background: rgba(21, 27, 59, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.1);
             border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-            transition: transform 0.3s ease;
-            cursor: pointer;
+            padding: 1.25rem 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
             position: relative;
+            overflow: hidden;
         }
-        
-        .contestant-card:hover {
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-teal), var(--accent-purple));
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent-purple);
             transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(167, 139, 250, 0.2);
         }
-        
-        .contestant-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 1rem;
-            background-color: var(--secondary-color);
+
+        .project-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .project-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-purple));
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 2rem;
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
         }
-        
-        .contestant-name {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+
+        .project-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.65rem;
         }
-        
-        .contestant-team {
+
+        .project-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        /* Publications */
+        .publication-card {
+            border-left: 3px solid var(--accent-pink);
+            padding-left: 1.5rem;
+        }
+
+        .publication-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+        }
+
+        .publication-meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
             font-style: italic;
-            color: var(--secondary-color);
-            margin-bottom: 0.5rem;
         }
-        
-        .contestant-value {
-            background-color: var(--primary-color);
-            color: white;
+
+        .publication-extra {
+            display: none;
+        }
+
+        .publication-extra.visible {
+            display: block;
+        }
+
+        .toggle-btn {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: var(--accent-teal);
+            padding: 0.6rem 1.5rem;
             border-radius: 20px;
-            padding: 0.3rem 0.8rem;
-            display: inline-block;
-        }
-        
-        .add-to-team {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        .add-to-team:hover {
-            background-color: var(--primary-color);
-        }
-        
-        .team-section {
-            margin-top: 2rem;
-        }
-        
-        .team-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
+            transition: all 0.3s ease;
             margin-top: 1rem;
-            padding: 1rem;
-            background-color: var(--accent-color);
-            border-radius: 8px;
+            font-family: 'Work Sans', sans-serif;
         }
-        
-        .team-member {
-            background-color: white;
-            border-radius: 8px;
-            padding: 0.5rem;
+
+        .toggle-btn:hover {
+            background: rgba(0, 217, 255, 0.2);
+            border-color: var(--accent-teal);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 217, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Decorative elements */
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            width: 100px;
+            height: 100px;
+            background: var(--accent-teal);
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            background: var(--accent-purple);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-delay: 5s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            width: 80px;
+            height: 80px;
+            background: var(--accent-pink);
+            border-radius: 50%;
+            animation-delay: 10s;
+        }
+
+              .social-links {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 1s ease-out 0.8s backwards;
+        }
+
+        .social-link {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-        
-        .team-member img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .team-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-        }
-        
-        .team-budget, .team-bonus {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-        }
-        
-        .rules-section {
-            margin-top: 2rem;
-        }
-        
-        .rules-list {
-            list-style-position: inside;
-            margin-top: 1rem;
-        }
-        
-        .rules-list li {
-            margin-bottom: 0.5rem;
-            padding-left: 1rem;
-        }
-        
-        .bonus-section {
-            margin-top: 2rem;
-        }
-        
-        .bonus-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        .bonus-table th, .bonus-table td {
-            border: 1px solid #ddd;
-            padding: 0.8rem;
-            text-align: left;
-        }
-        
-        .bonus-table th {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .bonus-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        
-        .bonus-table tr:hover {
-            background-color: var(--accent-color);
-        }
-        
-        .stats-section {
-            margin-top: 2rem;
-        }
-        
-        .create-team-btn {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            margin-top: 1rem;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        .create-team-btn:hover {
-            background-color: var(--dark-color);
-        }
-        
-        footer {
-            background-color: var(--dark-color);
-            color: white;
-            text-align: center;
-            
-            margin-top: 2rem;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .social-links a {
-            color: white;
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
-        }
-        
-        .social-links a:hover {
-            color: var(--accent-color);
-        }
-        
-        /* Stili per la pagina di classifica */
-        .ranking-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .action-bar {
-            margin-bottom: 1rem;
-        }
-        
-        .filter-dropdown {
-            padding: 0.5rem;
-            border-radius: 4px;
-            border: 1px solid var(--secondary-color);
-            margin-right: 0.5rem;
-        }
-        
-        .ranking-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        
-        .ranking-table th, .ranking-table td {
-            border: 1px solid #ddd;
-            padding: 0.8rem;
-            text-align: left;
-        }
-        
-        .ranking-table th {
-            background-color: var(--secondary-color);
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        
-        .ranking-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        
-        .ranking-table tr:hover {
-            background-color: var(--accent-color);
-        }
-        
-        .points-badge {
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 20px;
-            padding: 0.3rem 0.8rem;
-            display: inline-block;
-            font-weight: bold;
-        }
-        
-        .ranking-position {
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-align: center;
-        }
-        
-        .first {
-            color: gold;
-        }
-        
-        .second {
-            color: silver;
-        }
-        
-        .third {
-            color: #cd7f32; /* bronze */
-        }
-        
-        /* Stili per la sezione di assegnazione punti */
-        .points-form {
-            background-color: var(--light-color);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 1.5rem;
-        }
-        
-        .points-form h3 {
-            margin-bottom: 1rem;
-            color: var(--dark-color);
-        }
-        
-        .form-row {
-            display: flex;
-            margin-bottom: 1rem;
-            align-items: center;
-        }
-        
-        .form-label {
-            flex: 1;
-            margin-right: 1rem;
-        }
-        
-        .form-input {
-            flex: 2;
-            padding: 0.5rem;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-        
-        .form-select {
-            flex: 2;
-            padding: 0.5rem;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-        
-        .submit-btn {
-            padding: 0.8rem 1.5rem;
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        .submit-btn:hover {
-            background-color: var(--primary-color);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .tappa-info {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background-color: var(--accent-color);
-            border-radius: 8px;
-        }
-        
-        .history-item {
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background-color: #f9f9f9;
-            border-radius: 4px;
-            border-left: 4px solid var(--secondary-color);
-        }
-        
-        .history-date {
-            color: var(--secondary-color);
+            padding: 0.6rem 1.2rem;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 25px;
+            color: var(--accent-teal);
+            text-decoration: none;
             font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
-        
-        .history-action {
-            font-weight: bold;
+
+        .social-link:hover {
+            background: rgba(0, 217, 255, 0.2);
+            border-color: var(--accent-teal);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 217, 255, 0.2);
         }
-        
-        .history-points {
-            display: inline-block;
-            margin-left: 0.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
         }
-        
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .main-content {
+            .section-header {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .section-number {
+                font-size: 2.5rem;
+            }
+
+            .card-header {
                 flex-direction: column;
             }
-            
-            .content {
-                order: -1;
+
+            .projects-grid {
+                grid-template-columns: 1fr;
             }
             
-            .form-row {
+            .social-links {
                 flex-direction: column;
-                align-items: flex-start;
             }
-            
-            .form-label, .form-input, .form-select {
-                width: 100%;
-                margin-bottom: 0.5rem;
+
+            .social-link {
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">🌍 FantaPechino 🌍</div>
-    </header>
-    
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
     <div class="container">
-        <div class="main-content">
-            <!-- <div class="sidebar">
-                <h2>Menu</h2>
-                <ul class="nav-links">
-                    <li><a onclick="showTab('home-tab')">Home</a></li>
-                    <li><a onclick="showTab('ranking-tab')">Classifica</a></li>
-                    <li><a onclick="showTab('points-tab')">Assegna Punti</a></li>
-                    <li><a onclick="showTab('home-tab')">Le mie squadre</a></li>
-                    <li><a onclick="showTab('home-tab')">Regolamento</a></li>
-                    <li><a onclick="showTab('home-tab')">Bonus/Malus</a></li>
-                    <li><a onclick="showTab('home-tab')">Statistiche</a></li>
-                    <li><a onclick="showTab('home-tab')">Lega Amici</a></li>
-                </ul>
-                
-                <div class="team-section">
-                    <h2>La mia Squadra</h2>
-                    <div class="team-preview">
-                        <div class="team-member">
-                            <div class="contestant-img">👥</div>
-                            <span>Seleziona</span>
-                        </div>
-                        <div class="team-member">
-                            <div class="contestant-img">👥</div>
-                            <span>Seleziona</span>
-                        </div>
-                        <div class="team-member">
-                            <div class="contestant-img">👥</div>
-                            <span>Seleziona</span>
-                        </div>
-                    </div>
-                    <div class="team-stats">
-                        <div class="team-budget">Budget: 100 crediti</div>
-                        <div class="team-bonus">Bonus: +0</div>
-                    </div>
-                    <button class="create-team-btn">Crea la tua squadra</button>
-                </div>
-            </div> -->
-            
-            <div class="content">
-                <div class="tappa-info">
-                    <h3>Tappa attuale: 1 - Filippine</h3>
-                    <p>Data ultima puntata: 13/03/2025</p>
-                </div>
-                <!-- Tab Home -->
-                <div id="home-tab" class="tab-content active">
-                    <h2>I Concorrenti</h2>
-                    
-                    <div class="contestant-cards">
-                        <div class="contestant-card">
-                            <div class="contestant-img">💇</div>
-                            <div class="contestant-name">Gli Estetici</div>
-                        </div>
-                        
-                        <div class="contestant-card">
-                            <div class="contestant-img">👯</div>
-                            <div class="contestant-name">Le Sorelle</div>
-                        </div>
-                        
-                        <div class="contestant-card">
-                            <div class="contestant-img">🎬</div>
-                            <div class="contestant-name">I Cineasti</div>
-
-                        </div>
-                        
-                        <div class="contestant-card">
-                            <div class="contestant-img">🎭</div>
-                            <div class="contestant-name">Gli Spettacolari</div>
-        
-                        </div>
-                        
-                        <div class="contestant-card">
-                            <div class="contestant-img">💃</div>
-                            <div class="contestant-name">I Primi Ballerini</div>
-               
-                        </div>
-                        
-                        <div class="contestant-card">
-                            <div class="contestant-img">✨</div>
-                            <div class="contestant-name">I Magici</div>
-                        </div>
-                        
-                        <div class="contestant-card">
-                            <div class="contestant-img">🏅</div>
-                            <div class="contestant-name">I Medagliati</div>
-                        </div>
-                        
-                        <div class="contestant-card">
-                            <div class="contestant-img">🌊</div>
-                            <div class="contestant-name">Le Atlantiche</div>
-
-                        </div>
-                        
-                        <div class="contestant-card">
-                            <div class="contestant-img">🤝</div>
-                            <div class="contestant-name">I Complici</div>
-     
-                        </div>
-                    </div>
-                    
-                    
-            
-                </div>
-                
-                <!-- Tab Classifica -->
-                <div id="ranking-tab">
-                    
- 
-                    
-                    <table class="ranking-table">
-   
-                        <tbody id="saved-data-container">
-                            <!-- La tabella verrà popolata dinamicamente con JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Tab Assegna Punti -->
-                <div id="points-tab">
-                    <h2>Assegna Punti alle Coppie</h2>
-                    <p>Inserisci i punti guadagnati dalle coppie in base alle loro azioni durante l'ultima puntata.</p>
-                    
-                    <div class="points-form">
-                        <h3>Nuova Azione</h3>
-                        <form id="points-assignment-form">
-                            <div class="form-row">
-                                <label class="form-label">Coppia:</label>
-                                <select class="form-select" id="couple-select" required>
-                                    <option value="">Seleziona una coppia</option>
-                                    <option value="Gli Estetici">Gli Estetici</option>
-                                    <option value="Le Sorelle">Le Sorelle</option>
-                                    <option value="I Cineasti">I Cineasti</option>
-                                    <option value="Gli Spettacolari">Gli Spettacolari</option>
-                                    <option value="I Primi Ballerini">I Primi Ballerini</option>
-                                    <option value="I Magici">I Magici</option>
-                                    <option value="I Medagliati">I Medagliati</option>
-                                    <option value="Le Atlantiche">Le Atlantiche</option>
-                                    <option value="I Complici">I Complici</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-row">
-                                <label class="form-label">Azione:</label>
-                                <select class="form-select" id="action-select" required>
-                                    <option value="">Seleziona un'azione</option>
-                                    <option value="Qualificazione prova immunità">Qualificazione prova immunità (+10)</option>
-                                    <option value="Vittoria prova immunità">Vittoria prova immunità (+20)</option>
-                                    <option value="Prima coppia a trovare alloggio per la notte">Prima coppia a trovare alloggio per la notte (+5)</option>
-                                    <option value="Coppia vincitrice di tappa">Coppia vincitrice di tappa (+30)</option>
-                                    <option value="Qualificazione in finale">Qualificazione in finale (+30)</option>
-                                    <option value="Coppia nella finalissima a 2">Coppia nella finalissima a 2 (+50)</option>
-                                    <option value="Seconda classificata di Pechino express">Seconda classificata di Pechino express (+75)</option>
-                                    <option value="Coppia vincitrice di Pechino Express">Coppia vincitrice di Pechino Express (+100)</option>
-                                    <option value="Prima coppia eliminata">Prima coppia eliminata (+20)</option>
-                                    <option value="Coppia eliminata ma salvata dalla busta rossa">Coppia eliminata ma salvata dalla busta rossa (+10)</option>
-                                    <option value="Abbraccio a Costantino">Abbraccio a Costantino (+5)</option>
-                                    <option value="Abbraccio a Fru">Abbraccio a Fru (+5)</option>
-                                    <option value="Incontro con connazionale">Incontro con connazionale (+10)</option>
-                                    <option value="Alla coppia viene offerto l’hotel">Alla coppia viene offerto l’hotel (+10)</option>
-                                    <option value="Alla coppia viene pagato il passaggio">Alla coppia viene pagato il passaggio (+10)</option>
-                                    <option value="La famiglia ospitante dà il passaggio la mattina dopo">La famiglia ospitante dà il passaggio la mattina dopo (+5)</option>
-                                    <option value="Il passaggio attende lo svolgersi delle missioni">Il passaggio attende lo svolgersi delle missioni (+5)</option>
-                                    <option value="Commozione">Commozione (+5)</option>
-                                    <option value="Passaggio condiviso (alla coppia ospitante)">Passaggio condiviso (alla coppia ospitante) (+10)</option>
-                                    
-                                    <!-- Malus -->
-                                    <option value="Passaggio rubato da un’altra coppia">Passaggio rubato da un’altra coppia (-10)</option>
-                                    <option value="Bandiera nera nel corso della tappa">Bandiera nera nel corso della tappa (-5)</option>
-                                    <option value="Ultima coppia con bandiera nera">Ultima coppia con bandiera nera (-20)</option>
-                                    <option value="Ultima coppia a trovare alloggio per la notte">Ultima coppia a trovare alloggio per la notte (-5)</option>
-                                    <option value="Vomito, malessere o infortunio">Vomito, malessere o infortunio (-20)</option>
-                                    <option value="Coppia che ripete prova dei 7 mostri">Coppia che ripete prova dei 7 mostri (-10)</option>
-                                    <option value="Coppia ultima classificata di tappa">Coppia ultima classificata di tappa (-10)</option>
-                                    <option value="La coppia riceve qualsiasi tipo di malus durante la tappa">La coppia riceve qualsiasi tipo di malus durante la tappa (-5)</option>
-                                    <option value="I membri della coppia litigano tra loro">I membri della coppia litigano tra loro (-5)</option>
-                                    <option value="Coppia perde la mappa">Coppia perde la mappa (-30)</option>
-                                    <option value="Costretto ad abbandonare il gioco">Costretto ad abbandonare il gioco (-50)</option>
-                                    <option value="Rifiuto prova">Rifiuto prova (-30)</option>
-                                    <option value="Ammonizione Costantino">Ammonizione Costantino (-10)</option>
-                                    <option value="A rischio eliminazione">A rischio eliminazione (-10)</option>
-                                    
-                                </select>
-                            </div>
-                            
-                            <div class="form-row">
-                                <label class="form-label">Tappa:</label>
-                                <select class="form-select" id="tappa-select" required>
-                                    <option value="Tappa 1">Tappa 1</option>
-                                    <option value="Tappa 2">Tappa 2</option>
-                                    <option value="Tappa 3" selected>Tappa 3</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-row">
-                                <label class="form-label">Data:</label>
-                                <input type="date" class="form-input" id="action-date" value="2025-03-02" required>
-                            </div>
-                            
-                            <div class="form-row">
-                                <label class="form-label">Note (opzionale):</label>
-                                <input type="text" class="form-input" id="action-notes" placeholder="Inserisci eventuali note...">
-                            </div>
-                            
-                            <button type="submit" class="submit-btn">Salva Punti</button>
-                        </form>
-                    </div>
-                    
-                    <div class="bonus-section">
-                        <h2>Bonus e Malus</h2>
-                        <table class="bonus-table">
-                            <thead>
-                                <tr>
-                                    <th>Azione</th>
-                                    <th>Punti</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Qualificazione prova immunità</td>
-                                    <td>+10</td>
-                                </tr>
-                                <tr>
-                                    <td>Vittoria prova immunità</td>
-                                    <td>+20</td>
-                                </tr>
-                                <tr>
-                                    <td>Prima coppia a trovare alloggio per la notte</td>
-                                    <td>+5</td>
-                                </tr>
-                                <tr>
-                                    <td>Coppia vincitrice di tappa</td>
-                                    <td>+30</td>
-                                </tr>
-                                <tr>
-                                    <td>Qualificazione in finale</td>
-                                    <td>+30</td>
-                                </tr>
-                                <tr>
-                                    <td>Coppia nella finalissima a 2</td>
-                                    <td>+50</td>
-                                </tr>
-                                <tr>
-                                    <td>Seconda classificata di Pechino express</td>
-                                    <td>+75</td>
-                                </tr>
-                                <tr>
-                                    <td>Coppia vincitrice di Pechino Express</td>
-                                    <td>+100</td>
-                                </tr>
-                                <tr>
-                                    <td>Prima coppia eliminata</td>
-                                    <td>+20</td>
-                                </tr>
-                                <tr>
-                                    <td>Coppia eliminata ma salvata dalla busta rossa</td>
-                                    <td>+10</td>
-                                </tr>
-                                <tr>
-                                    <td>Abbraccio a Costantino</td>
-                                    <td>+5</td>
-                                </tr>
-                                <tr>
-                                    <td>Abbraccio a Fru</td>
-                                    <td>+5</td>
-                                </tr>
-                                <tr>
-                                    <td>Incontro con connazionale</td>
-                                    <td>+10</td>
-                                </tr>
-                                <tr>
-                                    <td>Alla coppia viene offerto l’hotel</td>
-                                    <td>+10</td>
-                                </tr>
-                                <tr>
-                                    <td>Alla coppia viene pagato il passaggio</td>
-                                    <td>+10</td>
-                                </tr>
-                                <tr>
-                                    <td>La famiglia ospitante dà il passaggio la mattina dopo</td>
-                                    <td>+5</td>
-                                </tr>
-                                <tr>
-                                    <td>Il passaggio attende lo svolgersi delle missioni</td>
-                                    <td>+5</td>
-                                </tr>
-                                <tr>
-                                    <td>Commozione</td>
-                                    <td>+5</td>
-                                </tr>
-                                <tr>
-                                    <td>Passaggio condiviso (alla coppia ospitante)</td>
-                                    <td>+10</td>
-                                </tr>
-                                <tr>
-                                    <td>Passaggio rubato da un’altra coppia</td>
-                                    <td>-10</td>
-                                </tr>
-                                <tr>
-                                    <td>Bandiera nera nel corso della tappa</td>
-                                    <td>-5</td>
-                                </tr>
-                                <tr>
-                                    <td>Ultima coppia con bandiera nera</td>
-                                    <td>-20</td>
-                                </tr>
-                                <tr>
-                                    <td>Ultima coppia a trovare alloggio per la notte</td>
-                                    <td>-5</td>
-                                </tr>
-                                <tr>
-                                    <td>Vomito, malessere o infortunio</td>
-                                    <td>-20</td>
-                                </tr>
-                                <tr>
-                                    <td>Coppia che ripete prova dei 7 mostri</td>
-                                    <td>-10</td>
-                                </tr>
-                                <tr>
-                                    <td>Coppia ultima classificata di tappa</td>
-                                    <td>-10</td>
-                                </tr>
-                                <tr>
-                                    <td>La coppia riceve qualsiasi tipo di malus durante la tappa</td>
-                                    <td>-5</td>
-                                </tr>
-                                <tr>
-                                    <td>I membri della coppia litigano tra loro</td>
-                                    <td>-5</td>
-                                </tr>
-                                <tr>
-                                    <td>Coppia perde la mappa</td>
-                                    <td>-30</td>
-                                </tr>
-                                <tr>
-                                    <td>Costretto ad abbandonare il gioco</td>
-                                    <td>-50</td>
-                                </tr>
-                                <tr>
-                                    <td>Rifiuto prova</td>
-                                    <td>-30</td>
-                                </tr>
-                                <tr>
-                                    <td>Ammonizione Costantino</td>
-                                    <td>-10</td>
-                                </tr>
-                                <tr>
-                                    <td>A rischio eliminazione</td>
-                                    <td>-10</td>
-                                </tr>                                
-                            </tbody>
-                        </table>
-                    </div>
+        <header>
+            <div class="hero">
+                <h1>Nicholas<br>Nisopoli</h1>
+                <p class="subtitle">Systems Architect and AI Researcher</p>
+                <p class="subtitle">Advancing healthcare through intelligent systems</p>
+                <p class="company">SurgiQ · Genova, Italy</p>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/nicholas-nisopoli/" target="_blank" class="social-link">
+                        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        LinkedIn
+                    </a>
+                    <a href="https://medium.com/@nicholas.nisopoli" target="_blank" class="social-link">
+                        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+                        </svg>
+                        Medium
+                    </a>
                 </div>
             </div>
-        </div>
+        </header>
+
+        <main>
+            <!-- Work Experience Section -->
+            <section id="work">
+                <div class="section-header">
+                    <h2 class="section-title">Experience</h2>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Systems Architect - Lead Dev&AI</h3>
+                                <p class="card-subtitle">SurgiQ</p>
+                            </div>
+                            <span class="card-date">Dec 2021 - Present</span>
+                        </div>
+                        <p class="card-description">
+                            <ul>
+                                <li>Lead the design and development of scalable software solutions for healthcare applications</li>
+                                <li>Collaborate with cross-functional teams to define technical requirements and architecture</li>
+                                <li>Implement AI-driven features to enhance system capabilities and user experience</li>
+                                <li>Ensure application security and compliance with healthcare regulations</li>
+                                <li>Manage database systems and optimize performance for large datasets</li>
+                                <li>Integrate third-party services and APIs to expand system functionality</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Researcher</h3>
+                                <p class="card-subtitle">University of Genova</p>
+                            </div>
+                            <span class="card-date">Jul 2021 - Oct 2021</span>
+                        </div>
+                        <p class="card-description">
+                            Recognition of human activities using neural networks.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education Section -->
+            <section id="education">
+                <div class="section-header">
+                    <h2 class="section-title">Education</h2>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Master's degree in Computer Engineering</h3>
+                                <p class="card-subtitle">University of Genova</p>
+                            </div>
+                            <span class="card-date">2019 - 2021</span>
+                        </div>
+                        <p class="card-description">
+                            Final Grade: 110/110 cum Laude<br>
+                            Thesis: Artificial Intelligence techniques and applicative tools for hospital rehabilitation sessions rescheduling
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">Bachelor's degree in Computer Engineering</h3>
+                                <p class="card-subtitle">University of Genova</p>
+                            </div>
+                            <span class="card-date">2016 - 2019</span>
+                        </div>
+                        <p class="card-description">
+                            Thesis: Platform Game development for Android devices in Unity environment
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Publications Section -->
+            <section id="publications">
+                <div class="section-header">
+                    <h2 class="section-title">Publications</h2>
+                </div>
+
+                <div class="card publication-card">
+                    <div class="card-content">
+                        <h3 class="publication-title">Rescheduling rehabilitation sessions with answer set programming</h3>
+                        <p class="publication-meta">Journal of Logic and Computation - Oxford University, 2023</p>
+                    </div>
+                </div>
+
+                <div class="card publication-card">
+                    <div class="card-content">
+                        <h3 class="publication-title">Guida storico-artistica "Chiesa della Ss. Annunziata di Portoria Santa Caterina da Genova</h3>
+                        <p class="publication-meta">Museo dei Beni Culturali Cappuccini, 2020</p>
+                    </div>
+                </div>
+
+                <div class="publication-extra">
+                    <div class="card publication-card">
+                        <div class="card-content">
+                            <h3 class="publication-title">Verrà il mattino e avrà un tuo verso - XVI Edizione</h3>
+                            <p class="publication-meta">Aletti Editore, 2019</p>
+                        </div>
+                    </div>
+
+                    <div class="card publication-card">
+                        <div class="card-content">
+                            <h3 class="publication-title">Racconti Liguri - Edizione 2017</h3>
+                            <p class="publication-meta">Historica, 2019</p>
+                        </div>
+                    </div>
+
+                    <div class="card publication-card">
+                        <div class="card-content">
+                            <h3 class="publication-title">Lontane realtà</h3>
+                            <p class="publication-meta">Streetlib, 2017</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="toggle-btn" onclick="togglePublications()">Show More Publications</button>
+            </section>
+
+            <!-- Awards Section -->
+            <section id="awards">
+                <div class="section-header">
+                    <h2 class="section-title">Awards</h2>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Academic Competition Awards</h3>
+                        <p class="card-description">
+                            • 3rd Place Start Cup 2021, Unige<br>
+                            • 3rd Place Award of 2020 startup contest by Wylab & Unige
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Literary Awards</h3>
+                        <p class="card-description">
+                            • Finalist at poem contest "Verrà il mattino e avrà un tuo verso", 2019<br>
+                            • Winner of litterary contest "Racconti liguri", 2017<br>
+                            • Contest "Io dono, voce del verbo" award, 2015<br>
+                            • Lion Club Genova Host, award for the essay "La rappresentazione del dono e la sua storia"
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects">
+                <div class="section-header">
+                    <h2 class="section-title">Projects</h2>
+                </div>
+
+                <div class="projects-grid">
+                    <div class="project-card" onclick="window.location.href='https://www.getundo.dpdns.org';">
+                        <div class="project-icon">💬</div>
+                        <h3 class="project-title">UNDO</h3>
+                        <p class="project-description">
+                            A social network with non persistent messages, where users can share content that disappears after a certain time. AI-powered content moderation and ephemeral messaging.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="window.location.href='https://trailworld.onrender.com';">
+                        <div class="project-icon">📍</div>
+                        <h3 class="project-title">Trailworld</h3>
+                        <p class="project-description">
+                            A web application that provides trail information and real-time weather data. AI-powered description generation.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="window.location.href='https://www.kaggle.com/code/nicholasnisopoli/automated-medical-literature-review';">
+                        <div class="project-icon">📚</div>
+                        <h3 class="project-title">Automated Medical Literature Review</h3>
+                        <p class="project-description">
+                            A system that uses LLMs agents and NLP to extract key insights from medical research papers, aiding clinicians in evidence-based decision making.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">Python</span>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-icon">🏥</div>
+                        <h3 class="project-title">Efficiency and transparency in waiting list management</h3>
+                        <p class="project-description">
+                            An innovative management model for surgical waiting lists based on process re-engineering and digital integration.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">Java</span>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-icon">🤟</div>
+                        <h3 class="project-title">LIS Gestures Recognition</h3>
+                        <p class="project-description">
+                            Neural network for LIS (Italian Sign Language) fingerspelling gestures recognition.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">Neural Networks</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card" onclick="window.location.href='https://github.com/Nik-dot/Sudoku-AI-Solver';">
+                        <div class="project-icon">🧩</div>
+                        <h3 class="project-title">Sudoku AI Solver</h3>
+                        <p class="project-description">
+                            A graphics tool to solve sudoku with Answer Set Programming.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">ASP</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-icon">🎵</div>
+                        <h3 class="project-title">Song Popularity Prediction</h3>
+                        <p class="project-description">
+                            Song popularity prediction using Random Forest on Spotify data.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">Machine Learning</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-icon">🌐</div>
+                        <h3 class="project-title">Personal Website</h3>
+                        <p class="project-description">
+                            Personal portfolio website showcasing projects and publications.
+                        </p>
+                        <div class="card-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p class="footer-text">© 2026 Nicholas Nisopoli. Systems Architect & AI Researcher.</p>
+        </footer>
     </div>
-    
-    <footer>
-        <p>&copy; 2025 FantaPechino - Il gioco non ufficiale di Pechino Express</p>
-        <div class="social-links">
-            <a href="#">📱</a>
-            <a href="#">💬</a>
-            <a href="#">📸</a>
-        </div>
-    </footer>
 
-    <script type="module">
-          // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-  import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyBok_FwYyiDQ42X8LM8oAr7-lKrCDuPW8o",
-    authDomain: "pechino-c5c66.firebaseapp.com",
-    projectId: "pechino-c5c66",
-    storageBucket: "pechino-c5c66.firebasestorage.app",
-    messagingSenderId: "761661899518",
-    appId: "1:761661899518:web:da75eb4c6b5ed53ef81baf",
-    databaseURL: "https://pechino-c5c66-default-rtdb.europe-west1.firebasedatabase.app/"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  let formData = [];
-
-function saveToFirebase(data) {
-  // Save data to Firebase
-  set(ref(db, data.id.toString()), data)
-    .then(() => {
-      console.log("Data saved successfully!");
-      // Reload the data after saving
-      loadDataFromFirebase();
-    })
-    .catch(error => {
-      console.error("Error saving data:", error);
-    });
-}
-
-function loadDataFromFirebase() {
-  const dbRef = ref(db);
-  get(dbRef).then(snapshot => {
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      formData = []; // Clear existing data
-      
-      // Convert Firebase object to array
-      for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-          formData.push(data[key]);
+    <script>
+        function togglePublications() {
+            const extraPublications = document.querySelector('.publication-extra');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            
+            if (extraPublications.classList.contains('visible')) {
+                extraPublications.classList.remove('visible');
+                toggleBtn.textContent = 'Show More Publications';
+            } else {
+                extraPublications.classList.add('visible');
+                toggleBtn.textContent = 'Show Less';
+            }
         }
-      }
-      
-      // Update both tables
-      displayFormData();
-    } else {
-      console.log("No data available.");
-      formData = [];
-      displayFormData();
-    }
-  }).catch(error => console.error("Error loading data:", error));
-}
-
-// Function to calculate total points for each couple
-function calculateTotalPoints() {
-  const totals = {};
-  
-  formData.forEach(entry => {
-    if (!totals[entry.couple]) {
-      totals[entry.couple] = 0;
-    }
-    totals[entry.couple] += entry.points;
-  });
-  
-  return totals;
-}
-
-// Function to display the saved data
-function displayFormData() {
-  const dataContainer = document.getElementById('saved-data-container');
-  
-  if (!dataContainer) {
-    console.error('Data container not found');
-    return;
-  }
-  
-  if (formData.length === 0) {
-    dataContainer.innerHTML = '<tr><td colspan="3">Nessun dato salvato.</td></tr>';
-    return;
-  }
-  
-  // Calculate totals
-  const totals = calculateTotalPoints();
-  
-  // Sort couples by points (descending)
-  const sortedCouples = Object.keys(totals).sort((a, b) => totals[b] - totals[a]);
-  
-  // Create standings table HTML
-  let standingsHtml = '';
-  
-  sortedCouples.forEach((couple, index) => {
-    const position = index + 1;
-    let positionClass = '';
-    
-    if (position === 1) positionClass = 'first';
-    else if (position === 2) positionClass = 'second';
-    else if (position === 3) positionClass = 'third';
-    
-    standingsHtml += `
-      <tr>
-        <td class="ranking-position ${positionClass}">${position}</td>
-        <td>${couple}</td>
-        <td><span class="points-badge">${totals[couple]}</span></td>
-      </tr>
-    `;
-  });
-  
-  // Update the standings table
-  dataContainer.innerHTML = standingsHtml;
-  
-  // Now handle the events table
-  const eventsTableContainer = document.getElementById('events-table-container');
-  
-  // If events container doesn't exist, create it
-  if (!eventsTableContainer) {
-    const eventsSection = document.createElement('div');
-    eventsSection.id = 'events-section';
-    eventsSection.classList.add('stats-section');
-    
-    eventsSection.innerHTML = `
-      <h2>Registro Eventi</h2>
-      <table class="ranking-table events-table">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Coppia</th>
-            <th>Tappa</th>
-            <th>Azione</th>
-            <th>Punti</th>
-            <th>Note</th>
-            <th>Azioni</th>
-          </tr>
-        </thead>
-        <tbody id="events-table-container">
-        </tbody>
-      </table>
-    `;
-    
-    // Add events section after the ranking tab
-    const rankingTab = document.getElementById('ranking-tab');
-    rankingTab.parentNode.insertBefore(eventsSection, rankingTab.nextSibling);
-  }
-  
-  // Get the events container again (it might have been created)
-  const eventsContainer = document.getElementById('events-table-container');
-  
-  if (eventsContainer) {
-    // Sort events by date (most recent first)
-    const sortedEvents = [...formData].sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    let eventsHtml = '';
-    
-    sortedEvents.forEach(entry => {
-      const formattedDate = new Date(entry.date).toLocaleDateString('it-IT');
-      
-      eventsHtml += `
-        <tr>
-          <td>${formattedDate}</td>
-          <td>${entry.couple}</td>
-          <td>${entry.tappa}</td>
-          <td>${entry.action}</td>
-          <td class="${entry.points >= 0 ? 'positive' : 'negative'}">${entry.points >= 0 ? '+' : ''}${entry.points}</td>
-          <td>${entry.notes || '-'}</td>
-          <td>
-            <button class="delete-btn" onclick="deleteEntry('${entry.id}')">Elimina</button>
-          </td>
-        </tr>
-      `;
-    });
-    
-    eventsContainer.innerHTML = eventsHtml;
-  }
-}
-
-// Function to delete an entry
-function deleteEntry(entryId) {
-  // Remove from Firebase
-  set(ref(db, entryId.toString()), null)
-    .then(() => {
-      console.log("Entry deleted successfully!");
-      // Reload the data
-      loadDataFromFirebase();
-    })
-    .catch(error => {
-      console.error("Error deleting entry:", error);
-    });
-}
-
-// Expose functions to global scope for event handlers
-window.deleteEntry = deleteEntry;
-
-// Points values mapping
-const pointsValues = {
-  "Qualificazione prova immunità": +10,
-  "Vittoria prova immunità": +20,
-  "Prima coppia a trovare alloggio per la notte": +5,
-  "Coppia vincitrice di tappa": +30,
-  "Qualificazione in finale": +30,
-  "Coppia nella finalissima a 2": +50,
-  "Seconda classificata di Pechino express": +75,
-  "Coppia vincitrice di Pechino Express": +100,
-  "Prima coppia eliminata": +20,
-  "Coppia eliminata ma salvata dalla busta rossa": +10,
-  "Abbraccio a Costantino": +5,
-  "Abbraccio a Fru": +5,
-  "Incontro con connazionale": +10,
-  "Alla coppia viene offerto l'hotel": +10,
-  "Alla coppia viene pagato il passaggio": +10,
-  "La famiglia ospitante dà il passaggio la mattina dopo": +5,
-  "Il passaggio attende lo svolgersi delle missioni": +5,
-  "Commozione": +5,
-  "Passaggio condiviso (alla coppia ospitante)": +10,
-
-  // Malus
-  "Passaggio rubato da un'altra coppia": -10,
-  "Bandiera nera nel corso della tappa": -5,
-  "Ultima coppia con bandiera nera": -20,
-  "Ultima coppia a trovare alloggio per la notte": -5,
-  "Vomito, malessere o infortunio": -20,
-  "Coppia che ripete prova dei 7 mostri": -10,
-  "Coppia ultima classificata di tappa": -10,
-  "La coppia riceve qualsiasi tipo di malus durante la tappa": -5,
-  "I membri della coppia litigano tra loro": -5,
-  "Coppia perde la mappa": -30,
-  "Costretto ad abbandonare il gioco": -50,
-  "Rifiuto prova": -30,
-  "Ammonizione Costantino": -10,
-  "A rischio eliminazione": -10
-};
-
-// Function to handle form submission
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('points-assignment-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    // Get form values
-    const couple = document.getElementById('couple-select').value;
-    const action = document.getElementById('action-select').value;
-    const tappa = document.getElementById('tappa-select').value;
-    const date = document.getElementById('action-date').value;
-    const notes = document.getElementById('action-notes').value;
-    
-    // Extract points value from the action
-    const actionName = action.split(' (')[0]; // Remove the points info from display
-    const points = pointsValues[actionName] || 0;
-    
-    // Create data entry
-    const entry = {
-      id: Date.now().toString(), // Unique ID for each entry
-      couple,
-      action: actionName,
-      points,
-      tappa,
-      date,
-      notes,
-      timestamp: new Date().toISOString()
-    };
-    
-    // Save to Firebase
-    saveToFirebase(entry);
-    
-    // Reset form
-    this.reset();
-    
-    // Set default values again
-    document.getElementById('tappa-select').value = 'Tappa 3';
-    document.getElementById('action-date').value = '2025-03-02';
-  });
-
-  // Tab navigation functions
-  window.showTab = function(tabId) {
-    // Hide all tabs
-    document.querySelectorAll('.tab-content').forEach(tab => {
-      tab.classList.remove('active');
-    });
-    
-    // Show the selected tab
-    document.getElementById(tabId).classList.add('active');
-  };
-
-  // Load data when page loads
-  loadDataFromFirebase();
-});
-        </script>
+    </script>
 </body>
+</html>
